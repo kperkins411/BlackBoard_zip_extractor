@@ -11,4 +11,4 @@ so this module will:
   unzip truncname.zip into \truncname
   go into \truncname
   unzip all .zip and .rar into seperate directories
-  delete all .zip, .rar and mostly useless .txt files
+  delete all .zip, .rar and mostly useless .txt files 
