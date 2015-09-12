@@ -1,6 +1,6 @@
 <b>Uses: python 3.4 <br>
-IDE:  pyCharm community</b>
-Automates extracting, arranging and cleaning ridiculously formatted blackboard zip files<br>
+IDE:  pyCharm community<br>
+Automates extracting, arranging and cleaning ridiculously formatted blackboard zip files</b><br>
 BB zips are so long that when extracted the path\name often overruns the limit allowed for max-path (thanks blackboard)
 so this module will:<br>
   truncate the name of the orig zip (truncname.zip)<br>
