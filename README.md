@@ -1,4 +1,5 @@
 Uses: python 3.4
+
 IDE:  pyCharm community
 
 Automates extracting, arranging and cleaning ridiculously formatted blackboard zip files
