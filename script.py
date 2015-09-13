@@ -17,7 +17,7 @@ class BB_ZipFix:
         self.path,self.orig_short_Name_Only,self.orig_short_Name_Plus_Ext = self.__strip_path_and_shortName(self.orig_zipfile,char_to_search)
 
         #the ones to be deleted
-        self.black_list = ['.txt']
+        self.black_list = ['.txt','.sdf']
         self.white_list = ['.zip','.rar']
         self.logger.info("Will delete Blackboard .txt files")
         self.logger.info("Will unzip .rar and .zip files")
