@@ -13,14 +13,28 @@ show_results        show stats
 class BB_ZipFix:
     def __init__(self,orig_zipfile,char_to_search = "_"):
         self.logger = logging.getLogger(__name__)
-        self.orig_zipfile = orig_zipfile
-        self.path,self.orig_short_Name_Only,self.orig_short_Name_Plus_Ext = self.__strip_path_and_shortName(self.orig_zipfile,char_to_search)
+        self.orig_zipfile   = orig_zipfile
+        self.char_to_search = char_to_search
 
         #the ones to be deleted
         self.black_list = ['.txt','.sdf']
         self.white_list = ['.zip','.rar']
         self.logger.info("Will delete Blackboard .txt files")
         self.logger.info("Will unzip .rar and .zip files")
+
+    def __shortenName_then_unzip_to_dir_then_delete_zip(self,path_plus_origName_Plus_Ext,char_to_search):
+        #strip out relative parts
+        path_plus_short_Name_No_Ext, path_plus_short_Name_Plus_Ext = self.__strip_path_and_shortName(path_plus_origName_Plus_Ext,char_to_search)
+
+        #shorten giant scholar name
+        self.__renamefile(path_plus_origName_Plus_Ext,path_plus_short_Name_Plus_Ext)
+
+        #unzip into directory(make it if necessary)
+        if self.__unzip_to_dir(path_plus_short_Name_Plus_Ext,path_plus_short_Name_No_Ext):
+            self.__DeleteFile(path_plus_short_Name_Plus_Ext)
+
+        #where it was unzipped to
+        return path_plus_short_Name_No_Ext
 
     def setupProjects(self):
         """
@@ -31,17 +45,13 @@ class BB_ZipFix:
         :return: nothing
         """
         try:
-            #shorten giant scholar name
-            self.__renamefile(self.orig_zipfile,self.orig_short_Name_Plus_Ext)
-
-            #unzip into directory(make it if necessary)
-            self.__unzip_to_dir(self.orig_short_Name_Plus_Ext,self.orig_short_Name_Only)
+            path_plus_short_Name_No_Ext = self.__shortenName_then_unzip_to_dir_then_delete_zip(self.orig_zipfile,self.char_to_search)
 
             #change into newly created dir and delete files with  self.black_list extensions
             #unzip those with white list extensions
-            self.__extract_and_clean_allfiles(self.orig_short_Name_Only)
+            self.__extract_and_clean_allfiles(path_plus_short_Name_No_Ext)
         except:
-            self.logger.info("Error in setupProjects")
+            self.logger.info("Error in setupProjects",exc_info=True)
 
     def __extract_and_clean_allfiles(self,path):
         #better than nothing check
@@ -51,16 +61,16 @@ class BB_ZipFix:
         dirs= os.listdir(path)
         for file in dirs:
             filename, file_extension = os.path.splitext(file)
-
-            if   file_extension in self.black_list:
-                self.__DeleteFile(path+ "\\" + file)
-            elif file_extension in self.white_list:
-                #first extract all from zip or rar
-                self.__unzip_to_dir(path+ "\\" + file,path+ "\\" + filename)
-                #then delete zip or rar
-                self.__DeleteFile(path+ "\\" + file)
-            else:
-                self.logger.debug("<B>found file that is in neithe white or blacklist:" + file +"</b>")
+            try:
+                if   file_extension in self.black_list:
+                    self.__DeleteFile(path+ "\\" + file)
+                elif file_extension in self.white_list:
+                    #first extract all from zip or rar
+                    self.__shortenName_then_unzip_to_dir_then_delete_zip(path+ "\\" + file,self.char_to_search)
+                else:
+                    self.logger.debug("<B>found file that is in neithe white or blacklist:" + file +"</b>")
+            except:
+                self.logger.info("Error in __extract_and_clean_allfiles",exc_info=True)
 
         return True
 
@@ -69,31 +79,36 @@ class BB_ZipFix:
                 os.remove(path_Plus_file)
                 self.logger.info("Deleted file:"+path_Plus_file)
            except:
-                self.logger.debug("Unexpected error:", sys.exc_info()[0])
+                self.logger.debug("Error in __DeleteFile:", exc_info=True)
 
     def __unzip_to_dir(self,zippedfile,dest_directory):
+        ret = True
         try:
              #unzip into directory(make it if necessary)
             tmpZip = zipfile.ZipFile(zippedfile)
             tmpZip.extractall(dest_directory)
             self.logger.info("Extracting files to:"+dest_directory)
         except:
-            self.logger.debug("Error Unzipping zip trying rar:", sys.exc_info()[0])
-            try:
-                #OK lets try .rar extractor
-                #first create directory
-                if not os.path.exists(dest_directory):
-                    os.makedirs(dest_directory)
-                    self.logger.info("   Unzip failed trying .rar file to:"+dest_directory)
-                #then extract
-                patoolib.extract_archive(zippedfile,verbosity=1, outdir=dest_directory)
-            except:
-                self.logger.debug("Error cannot extract rar file", sys.exc_info()[0])
-                return False
+            self.logger.debug("Error Unzipping zip:" + zippedfile + "\ntrying rar:", exc_info=True)
+            filenameonly,file_ext = os.path.splitext(zippedfile)
+            if file_ext == '.rar':
+                try:
+                    #OK lets try .rar extractor
+                    #first create directory
+                    if not os.path.exists(dest_directory):
+                        os.makedirs(dest_directory)
+                        self.logger.info("   Unzip failed trying .rar file to:"+dest_directory)
+                    #then extract
+                    patoolib.extract_archive(zippedfile,verbosity=1, outdir=dest_directory)
+                except:
+                    self.logger.debug("Error cannot extract rar file", exc_info=True)
+                    ret= False
+        return ret
+
 
     #strips the rubbish that scholar appends while preserving the extension
     #returns the path,
-    def __strip_path_and_shortName(self,filename, char_to_search = "_"):
+    def __strip_path_and_shortName(self,filename, char_to_search):
         #find second  occurrence of '_'
         if len(filename)>0:
             try:
@@ -108,7 +123,7 @@ class BB_ZipFix:
                 self.logger.debug("Original giant zip:"+ filename)
                 self.logger.debug("Short zip:"+ short_Name_plus_ext)
 
-                return[path,short_Name_Only, short_Name_plus_ext ]
+                return[short_Name_Only, short_Name_plus_ext ]
 
             except ValueError:
                 self.logger.debug("ERROR: " + self.orig_zipfile +" did not contain " + char_to_search)

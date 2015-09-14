@@ -5,12 +5,19 @@ from script import BB_ZipFix
 from tkinter import *
 from tkinter import filedialog
 import logging
+from settings import Settings
+
+
+import os
 
 class Application(Frame):
     def __init__(self,parent,str_filename=''):
         Frame.__init__(self, parent)
+        self.logger = logging.getLogger(__name__)
         self.parent = parent
         self.str_filename = str_filename
+        self.defaultDir = ''
+        self.uiStateFilename="UIState.txt"
         self.create_widgets()
 
     def create_widgets(self):
@@ -30,6 +37,8 @@ class Application(Frame):
         find_file_button=Button(self,text="Choose zip",command = self.find_file,padx=5,pady=5)
         find_file_button.grid(row=1,column=0,sticky=W,padx=5,pady=5)
 
+        #pull serialized dir from memory as defaault place to look
+
         #create a file textbox
         self.entry_file_name = Entry(self)
         self.entry_file_name.insert(0,self.str_filename)
@@ -43,11 +52,17 @@ class Application(Frame):
         self.output = Text(self)
         self.output.grid(row=3, column=0, columnspan=5, rowspan=1, padx=5,pady=5, sticky=E+W+S+N)
 
+        self.defaultDir = Settings(self.uiStateFilename).stateRestore()
 
     def find_file(self):
         #TODO filepicker
-        self.str_filename = filedialog.askopenfilename(filetypes = (("Zip files", "*.zip")
+        self.str_filename = filedialog.askopenfilename(initialdir=self.defaultDir, filetypes = (("Zip files", "*.zip")
                                                                     ,("All files", "*.*")))
+        newdir= os.path.split(self.str_filename)[0]
+        if newdir:
+            self.defaultDir=newdir
+            Settings(self.uiStateFilename).stateSave(self.defaultDir)
+
         #set textbox value
         self.entry_file_name.delete(0,END)
         self.entry_file_name.insert(0,self.str_filename)
