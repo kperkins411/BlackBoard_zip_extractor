@@ -2,7 +2,7 @@
 __author__ = 'Perkins'
 import zipfile,os
 import sys
-import patoolib     #to unextract .rar files
+#import patoolib     #to unextract .rar files
 import logging
 
 '''
@@ -16,8 +16,8 @@ class BB_ZipFix:
         self.orig_zipfile   = orig_zipfile
         self.char_to_search = char_to_search
 
-        #the ones to be deleted
-        self.black_list = ['.txt','.sdf']
+        #the ones to be deleted (add .txt if needed
+        self.black_list = ['.sdf']
         self.white_list = ['.zip','.rar']
         self.logger.info("Will delete Blackboard .txt files")
         self.logger.info("Will unzip .rar and .zip files")
@@ -99,7 +99,7 @@ class BB_ZipFix:
                         os.makedirs(dest_directory)
                         self.logger.info("   Unzip failed trying .rar file to:"+dest_directory)
                     #then extract
-                    patoolib.extract_archive(zippedfile,verbosity=1, outdir=dest_directory)
+                    # patoolib.extract_archive(zippedfile,verbosity=1, outdir=dest_directory)
                 except:
                     self.logger.debug("Error cannot extract rar file", exc_info=True)
                     ret= False
@@ -116,8 +116,8 @@ class BB_ZipFix:
                 if path:
                     path +="\\"
                 filenameonly,file_ext = os.path.splitext(filename_plus_ext)
-                tmp = filenameonly.split(char_to_search,2)
-                short_Name_Only = path + tmp[0] +"_"+ tmp[1]
+                tmp = filenameonly.split(char_to_search,3)
+                short_Name_Only = path + tmp[0] +"_"+ tmp[1]+"_"+ tmp[2]
                 short_Name_plus_ext = short_Name_Only+ file_ext
 
                 self.logger.debug("Original giant zip:"+ filename)
