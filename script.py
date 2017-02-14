@@ -66,7 +66,7 @@ class BB_ZipFix:
                     self.__DeleteFile(path+ "\\" + file)
                 elif file_extension in self.white_list:
                     #first extract all from zip or rar
-                    self.__shortenName_then_unzip_to_dir_then_delete_zip(path+ "\\" + file,self.char_to_search)
+                    self.__shortenName_then_unzip_to_dir_then_delete_zip(path+ file,self.char_to_search)
                 else:
                     self.logger.debug("<B>found file that is in neithe white or blacklist:" + file +"</b>")
             except:
@@ -110,14 +110,23 @@ class BB_ZipFix:
     #returns the path,
     def __strip_path_and_shortName(self,filename, char_to_search):
         #find second  occurrence of '_'
+        sep = os.path.sep
         if len(filename)>0:
             try:
                 path,filename_plus_ext =  os.path.split(filename)
                 if path:
-                    path +="\\"
+                    path +=sep
                 filenameonly,file_ext = os.path.splitext(filename_plus_ext)
                 tmp = filenameonly.split(char_to_search,3)
-                short_Name_Only = path + tmp[0] +"_"+ tmp[1]+"_"+ tmp[2]
+
+                short_Name_Only = path
+                for val in tmp:
+                    r= val.find("00")
+                    if r != -1:
+                        short_Name_Only = path+ val[r:r+8]
+                        break
+
+
                 short_Name_plus_ext = short_Name_Only+ file_ext
 
                 self.logger.debug("Original giant zip:"+ filename)
