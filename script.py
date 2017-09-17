@@ -66,7 +66,8 @@ class BB_ZipFix:
                     self.__DeleteFile(path+ "\\" + file)
                 elif file_extension in self.white_list:
                     #first extract all from zip or rar
-                    self.__shortenName_then_unzip_to_dir_then_delete_zip(path+ file,self.char_to_search)
+                    pathandfile=os.path.join(path, file)
+                    self.__shortenName_then_unzip_to_dir_then_delete_zip(pathandfile,self.char_to_search)
                 else:
                     self.logger.debug("<B>found file that is in neithe white or blacklist:" + file +"</b>")
             except:
