@@ -50,7 +50,7 @@ class BB_ZipFix:
             #change into newly created dir and delete files with  self.black_list extensions
             #unzip those with white list extensions
             self.__extract_and_clean_allfiles(path_plus_short_Name_No_Ext)
-        except:
+        except :
             self.logger.info("Error in setupProjects",exc_info=True)
 
     def __extract_and_clean_allfiles(self,path):

@@ -1,0 +1,25 @@
+script INFO Will delete Blackboard .txt files
+script INFO Will unzip .rar and .zip files
+script DEBUG Original giant zip:/home/keith/Desktop/475-575/s19_all/p5/g/gradebook_CPSC575_8104_Spring_Semester_2019_Project205_2019-04-20-16-21-28.zip
+script DEBUG Short zip:/home/keith/Desktop/475-575/s19_all/p5/g/.zip
+script DEBUG Renamed:/home/keith/Desktop/475-575/s19_all/p5/g/gradebook_CPSC575_8104_Spring_Semester_2019_Project205_2019-04-20-16-21-28.zip to /home/keith/Desktop/475-575/s19_all/p5/g/.zip
+script INFO Extracting files to:/home/keith/Desktop/475-575/s19_all/p5/g/
+script INFO Deleted file:/home/keith/Desktop/475-575/s19_all/p5/g/.zip
+script DEBUG <B>found file that is in neithe white or blacklist:Project 5_00896839_attempt_2019-04-19-16-15-12.txt</b>
+script DEBUG Original giant zip:/home/keith/Desktop/475-575/s19_all/p5/g/Project 5_00898751_attempt_2019-04-19-23-09-08_Walker_Grubbs_Project5.zip
+script DEBUG Short zip:/home/keith/Desktop/475-575/s19_all/p5/g/00898751.zip
+script DEBUG Renamed:/home/keith/Desktop/475-575/s19_all/p5/g/Project 5_00898751_attempt_2019-04-19-23-09-08_Walker_Grubbs_Project5.zip to /home/keith/Desktop/475-575/s19_all/p5/g/00898751.zip
+script INFO Extracting files to:/home/keith/Desktop/475-575/s19_all/p5/g/00898751
+script INFO Deleted file:/home/keith/Desktop/475-575/s19_all/p5/g/00898751.zip
+script DEBUG <B>found file that is in neithe white or blacklist:Project 5_00904098_attempt_2019-04-19-20-38-07.txt</b>
+script DEBUG Original giant zip:/home/keith/Desktop/475-575/s19_all/p5/g/Project 5_00904098_attempt_2019-04-19-20-38-07_Project5_Breakfast.zip
+script DEBUG Short zip:/home/keith/Desktop/475-575/s19_all/p5/g/00904098.zip
+script DEBUG Renamed:/home/keith/Desktop/475-575/s19_all/p5/g/Project 5_00904098_attempt_2019-04-19-20-38-07_Project5_Breakfast.zip to /home/keith/Desktop/475-575/s19_all/p5/g/00904098.zip
+script INFO Extracting files to:/home/keith/Desktop/475-575/s19_all/p5/g/00904098
+script INFO Deleted file:/home/keith/Desktop/475-575/s19_all/p5/g/00904098.zip
+script DEBUG Original giant zip:/home/keith/Desktop/475-575/s19_all/p5/g/Project 5_00896839_attempt_2019-04-19-16-15-12_Breakfast.zip
+script DEBUG Short zip:/home/keith/Desktop/475-575/s19_all/p5/g/00896839.zip
+script DEBUG Renamed:/home/keith/Desktop/475-575/s19_all/p5/g/Project 5_00896839_attempt_2019-04-19-16-15-12_Breakfast.zip to /home/keith/Desktop/475-575/s19_all/p5/g/00896839.zip
+script INFO Extracting files to:/home/keith/Desktop/475-575/s19_all/p5/g/00896839
+script INFO Deleted file:/home/keith/Desktop/475-575/s19_all/p5/g/00896839.zip
+script DEBUG <B>found file that is in neithe white or blacklist:Project 5_00898751_attempt_2019-04-19-23-09-08.txt</b>
